@@ -1,48 +1,37 @@
+"use client";
+
 import { Metadata } from "next";
-import { Button, Card } from "ui";
-
-const CARD_CONTENT = [
-  {
-    title: "Caching Tasks",
-    href: "https://turbo.build/repo/docs/core-concepts/caching",
-    cta: "Read More",
-  },
-  {
-    title: "Running Tasks",
-    href: "https://turbo.build/repo/docs/core-concepts/monorepos/running-tasks",
-    cta: "Read More",
-  },
-  {
-    title: "Configuration Options",
-    href: "https://turbo.build/repo/docs/reference/configuration",
-    cta: "Read More",
-  },
-];
-
+import Slider from "../components/homepage/RecentCollection";
+import Service from "../components/homepage/Service";
+import ReecentlyListed from "../components/homepage/RecentListedNfts";
 export const metadata: Metadata = {
-  title: "Web - Turborepo Example",
+	title: "Web - Turborepo Example",
 };
 
 export default function Home() {
-  return (
-    <div className="flex min-h-screen flex-col items-center justify-center py-2">
-      <main className="mx-auto w-auto px-4 pt-16 pb-8 sm:pt-24 lg:px-8">
-        <h1 className="mx-auto text-center text-6xl font-extrabold tracking-tight text-white sm:text-7xl lg:text-8xl xl:text-8xl">
-          Web
-          <span className="block bg-gradient-to-r from-brandred to-brandblue bg-clip-text text-transparent px-2">
-            Turborepo Example
-          </span>
-        </h1>
-        <div className="mx-auto mt-5 max-w-xl sm:flex sm:justify-center md:mt-8">
-          <Button />
-        </div>
+	return (
+		<div className="flex flex-col items-center justify-center py-2">
+			<main className="mx-auto h-[40vh] lg:h-[60vh]  w-auto px-4 pt-16 pb-8 sm:pt-24 lg:px-8 flex flex-col items-center justify-center gap-4">
+				<h1 className="mx-auto text-center text-xl font-extrabold tracking-tight text-white sm:text-7xl lg:text-4xl">
+					Discover, collect, and sell NFTs 🖼️
+				</h1>
+				<p className="text-gray-500 lg:text-[1.2rem]">
+					Discover the most outstanding NTFs in all topics of life. Creative
+					your NTFs and sell them
+				</p>
+				<div className="mx-auto mt-5 max-w-xl sm:flex sm:justify-center md:mt-8">
+					<button
+						className="ui-flex ui-w-full ui-items-center ui-justify-center ui-rounded-md ui-border ui-border-transparent ui-px-8 ui-py-3 ui-text-base ui-font-medium ui-no-underline ui-bg-white ui-text-black hover:ui-bg-gray-300 md:ui-py-3 md:ui-px-10 md:ui-text-lg md:ui-leading-6"
+						onClick={() => {}}>
+						Start your search
+					</button>
+				</div>
 
-        <div className="mt-12 grid grid-cols-1 sm:grid-cols-3 gap-4 place-content-evenly">
-          {CARD_CONTENT.map((card) => (
-            <Card key={card.title} {...card} />
-          ))}
-        </div>
-      </main>
-    </div>
-  );
+				
+			</main>
+			<Service/>
+			<ReecentlyListed/>
+			<Slider/>
+		</div>
+	);
 }
