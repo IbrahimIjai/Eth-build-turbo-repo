@@ -12,7 +12,7 @@ export default function RootLayout({
 	children: React.ReactNode;
 }) {
 	return (
-		<html lang="en" className="bg-black overflow-x-hidden w-screen ">
+		<html lang="en" className="bg-gray-900 overflow-x-hidden w-screen ">
 			<body>
 				<Providers>
 					<Navbar />

@@ -1,9 +1,9 @@
 "use client";
 
 import { Metadata } from "next";
-import Slider from "../components/homepage/RecentCollection";
-import Service from "../components/homepage/Service";
-import ReecentlyListed from "../components/homepage/RecentListedNfts";
+import Slider from "../modules/homepage/RecentCollection";
+import Service from "../modules/homepage/Service";
+import ReecentlyListed from "../modules/homepage/RecentListedNfts";
 export const metadata: Metadata = {
 	title: "Web - Turborepo Example",
 };

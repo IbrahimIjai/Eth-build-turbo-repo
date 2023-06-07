@@ -27,7 +27,7 @@ export default function Navbar() {
 
 	const pathname = usePathname();
 	return (
-		<div className="w-screen z-10 bg-black flex items-center fixed top-0 right-0 left-0 justify-between px-6 py-4 border-b-[.8px] border-[#ffdf2b57]">
+		<div className="w-screen z-10 bg-gray-900 flex items-center fixed top-0 right-0 left-0 justify-between px-6 py-4 border-b-[.8px] border-[#ffdf2b57]">
 			<div className="text-gray-300 flex items-center gap-3">
 				<div className="flex lg:hidden">
 					<RxDropdownMenu size={25}/>
