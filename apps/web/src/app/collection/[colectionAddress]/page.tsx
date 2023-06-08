@@ -1,19 +1,18 @@
-/** @format */
-
+"use client"
 import images from "../../../components/img";
-import ListCard from "../../../components/NFTCard";
+import NFTcard from "../../../components/NFTCard";
 import Image from "next/image";
 export default function NFTId() {
 	return (
-		<div>
+		<div className="px-[2.5rem] flex flex-col items-center">
 			<div>
 				<p>collection contract: 0x30k0kd0okrd00kdf0k30k0k0</p>
 			</div>
-			<div className="relative w-[150x] h-[150px] overflow-hidden rounded-[50%]">
+			<div className="relative w-[150px] h-[150px] overflow-hidden rounded-[50%]">
 				<Image
 					src={images.nft_image_2}
 					fill
-					style={{ objectFit: "contain" }}
+					style={{ objectFit: "cover" }}
 					alt="an Image"
 				/>
 			</div>
@@ -25,10 +24,10 @@ export default function NFTId() {
 					benefits within the world.
 				</p>
 			</div>
-			<div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
+			<div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
 				{[1, 2, 3, 4, 5, 6, 7].map((item, i) => {
 					return (
-						<ListCard
+						<NFTcard
 							card={{
 								imgUrl: images.nft_image_3,
 								nftName: "Unknown gun men",

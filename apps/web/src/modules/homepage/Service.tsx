@@ -4,7 +4,7 @@ import React from "react";
 import Image from "next/image";
 
 //INTERNAL IMPORT
-import images from "../img";
+import images from "../../components/img";
 const Service = () => {
 	const serviceArr = [
 		{

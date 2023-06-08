@@ -11,7 +11,7 @@ import {
 	useWaitForTransaction,
   } from 'wagmi';
 
-export default function ListCard({ card }) {
+export default function NFTCard({ card }) {
 	return (
 		<div className="cursor-pointer  border border-yellow-900 text-white rounded-xl">
 			<Tilt
@@ -21,7 +21,7 @@ export default function ListCard({ card }) {
 					scale: 1,
 					speed: 230,
 				}}>
-				<div className="overflow-hidden  rounded-lg relative w-[75px] md:w-[120px] lg:w-[220px] h-[80px] lg:h-[160px]">
+				<div className="overflow-hidden  rounded-lg relative w-full h-[80px] lg:h-[160px]">
 					<Image
 						className="hover:scale-105 transition duration-100 ease-in"
 						src={card.imgUrl}
@@ -34,7 +34,7 @@ export default function ListCard({ card }) {
 					<p className="">{card.nftName}</p>
 					<p className="">{card.price}</p>
 				</div>
-				<button className="rounded-tl-lg rounded-tr-lg  text-[.6rem] lg:text-[1rem] w-full bg-primary text-black font-semibold">
+				<button className="rounded-lg  text-[.6rem] lg:text-[1rem] w-full bg-primary text-black font-semibold">
 					Buy Now
 				</button>
 			</Tilt>

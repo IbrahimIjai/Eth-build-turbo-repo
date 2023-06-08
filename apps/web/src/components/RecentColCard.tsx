@@ -4,11 +4,11 @@ import React from "react";
 import { motion } from "framer-motion";
 import Image from "next/image";
 
-const SliderCard = ({ el, i }) => {
+const RecentColCard = ({ el, i }) => {
 	return (
-		<motion.div className="p-4">
+		<motion.div className="relative">
 			<div className="transition text-gray-300 duration-500 rounded-8 pb-1 hover:shadow-lg border border-yellow-900 hover:border-primary  rounded-lg shadow-primary">
-				<motion.div className="overflow-hidden rounded-lg relative w-[150px] lg:w-[380px] h-[100px] lg:h-[180px]">
+				<motion.div className="overflow-hidden rounded-lg relative w-full lg:w-[300px] h-[100px] lg:h-[180px]">
 					<Image
 						src={el.background}
 						alt="slider profile"
@@ -26,15 +26,8 @@ const SliderCard = ({ el, i }) => {
 
 				<div className="flex justify-between p-2 mt-2 text-end">
 					<div className="bg-primary text-black flex flex-col items-center justify-center p-1 text-[.7rem] rounded-lg ">
-						<small className="whitespace-nowrap font-bold ">Mint price</small>
-						<p className="whitespace-nowrap text-[1.2rem]">{i + 2}.000 ETH</p>
-					</div>
-
-					<div className="text-[.65rem] whitespace-nowrap lg:text-[1.3rem] font-semibold">
-						<small>Reaming time</small>
-						<p className="">
-							{i + 1}h : 15m : {i + 4}0s
-						</p>
+						<small className="whitespace-nowrap font-bold ">Floor price</small>
+						<p className="whitespace-nowrap text-[.4rem]">{i + 2}.000 ETH</p>
 					</div>
 				</div>
 			</div>
@@ -42,4 +35,4 @@ const SliderCard = ({ el, i }) => {
 	);
 };
 
-export default SliderCard;
+export default RecentColCard;
