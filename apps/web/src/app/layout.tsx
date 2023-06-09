@@ -19,6 +19,7 @@ export default function RootLayout({
 			<body>
 				<Providers>
 					<Navbar toggle={() => toggleOpen()}/>
+					{isOpen && <Siebar isOpen={isOpen}/>}
 					{children}
 					<Footer/>
 				</Providers>
