@@ -4,11 +4,10 @@
 import Link from "next/link";
 import Logo from "../logo";
 import { usePathname } from "next/navigation";
-import { RxDropdownMenu } from "react-icons/rx";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
+import MenuToggle from "../sidebar/MenuToggle";
 
-
-export default function Navbar() {
+export default function Navbar({toggle}) {
 
 	const routLink = [
 		{
@@ -30,7 +29,7 @@ export default function Navbar() {
 		<div className="w-screen z-10 bg-gray-900 flex items-center fixed top-0 right-0 left-0 justify-between px-6 py-4 border-b-[.8px] border-[#ffdf2b57]">
 			<div className="text-gray-300 flex items-center gap-3">
 				<div className="flex lg:hidden">
-					<RxDropdownMenu size={25}/>
+					<MenuToggle toggle={toggle}/>
 				</div>
 				<Logo />
 			</div>
