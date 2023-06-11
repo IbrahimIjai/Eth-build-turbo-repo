@@ -13,6 +13,7 @@ module.exports = {
         primary: "#FFDF2B",
         navBg: "rgba(222, 205, 65, 0.37)",
         secondary: colors.red[500],
+        backdrop: "rgba(160, 159, 110, 0.2)"
       },
       gridTemplateColumns: {
         // Simple 16 column grid

@@ -38,8 +38,9 @@ const OwnedCollection = () => {
 
 	return (
 		<div className="w-full text-white">
-			<motion.div className="grid grid-cols-2 lg:grid-cols-3 gap-4">
-				{FollowingArray.map((el, i) => (
+			<p>Here are your created collections</p>
+			<motion.div className="grid mt-6 grid-cols-2 lg:grid-cols-3 gap-4">
+				{FollowingArray.length==0? "": FollowingArray.map((el, i) => (
 					<RecentColCard key={i + 1} el={el} i={i} />
 				))}
 			</motion.div>

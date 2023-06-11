@@ -5,47 +5,57 @@ import Link from "next/link";
 import Logo from "../logo";
 import { usePathname } from "next/navigation";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
-import MenuToggle from "../sidebar/MenuToggle";
 
-export default function Navbar({toggle}) {
 
-	const routLink = [
-		{
-			name: "Create",
-			route: "/create",
-		},
-		{
-			name: "Discover",
-			route: "/discover",
-		},
-		{
-			name: "Profile",
-			route: "/profile",
-		},
-	];
+
+export const routLink = [
+	{
+		name: "Create",
+		route: "/create",
+	},
+	{
+		name: "Collections",
+		route: "/collections",
+	},
+	{
+		name: "Market",
+		route: "/market",
+	},
+	{
+		name: "Profile",
+		route: "/profile",
+	},
+	{
+		name: "Whitepaper",
+		route: "/",
+	},
+	{
+		name: "Profile",
+		route: "/profile",
+	},
+];
+export default function Navbar() {
+
 
 	const pathname = usePathname();
 	return (
-		<div className="w-screen z-10 bg-gray-900 flex items-center fixed top-0 right-0 left-0 justify-between px-6 py-4 border-b-[.8px] border-[#ffdf2b57]">
-			<div className="text-gray-300 flex items-center gap-3">
-				<div className="flex lg:hidden">
-					<MenuToggle toggle={toggle}/>
-				</div>
+		<div className="w-screen z-10 bg-gray-900 fixed top-0 right-0 left-0  border-b-[.8px] border-[#ffdf2b57]">
+			<div className="flex items-center justify-between pl-12 lg:pl-0  w-full px-2 py-4 ">
 				<Logo />
+				<div className="hidden lg:flex items-center gap-2">
+					{routLink.map((route, i) => {
+						return (
+							<Link
+								key={i}
+								className={`${pathname == route.route && "border"}`}
+								href={route.route}>
+								<p className="text-primary">{route.name}</p>
+							</Link>
+						);
+					})}
+				</div>
+				<ConnectButton />
 			</div>
-			<div className="hidden lg:flex items-center gap-2">
-				{routLink.map((route, i) => {
-					return (
-						<Link
-							key={i}
-							className={`${pathname == route.route && "border"}`}
-							href={route.route}>
-							<p className="text-primary">{route.name}</p>
-						</Link>
-					);
-				})}
-			</div>
-			<ConnectButton />
 		</div>
 	);
 }

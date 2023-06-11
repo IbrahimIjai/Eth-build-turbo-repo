@@ -12,14 +12,13 @@ export default function RootLayout({
 	children: React.ReactNode;
 }) {
 
-	const [isOpen, toggleOpen] = useCycle(false, true);
 	
 	return (
 		<html lang="en" className="bg-gray-900 overflow-x-hidden w-screen ">
-			<body>
+			<body className="">
 				<Providers>
-					<Navbar toggle={() => toggleOpen()}/>
-					{isOpen && <Siebar isOpen={isOpen}/>}
+					<Siebar/>
+					<Navbar />
 					{children}
 					<Footer/>
 				</Providers>

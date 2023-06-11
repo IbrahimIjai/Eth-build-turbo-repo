@@ -13,7 +13,7 @@ import {
 
 export default function NFTCard({ card }) {
 	return (
-		<div className="cursor-pointer  border border-yellow-900 text-white rounded-xl">
+		<div className="cursor-pointer w-full  border border-yellow-900 text-white rounded-xl">
 			<Tilt
 				className="flex flex-col justify-between"
 				options={{

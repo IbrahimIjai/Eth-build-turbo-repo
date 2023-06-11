@@ -67,22 +67,21 @@ export default function TransactionsList() {
 	return (
 		<div className="mt-4 flex flex-col items-center">
 			<p>Transactions with Our contract</p>
-			<div className="bg-gray-400 w-full px-[5%] lg:px-[10%]">
+			<div className="w-full mt-8 px-[5%] lg:px-[10%]">
 				{transactionsList.map((trx, i) => {
 					return (
-						<div className="cusor-pointer border-[.5px] shadow-lg" key={i}>
-							<p
-								className={`p-1 ${
-									trx.type === "Buy"
-										? "bg-green-400"
-										: trx.type == "Mint"
-										? "bg-orange-600"
-										: "bg-slate-200 text-primary"
-								} `}>
-								{trx.type}
-							</p>
+						<div
+							className={`cusor-pointer border-[.5px] shadow-lg ${
+								trx.type === "Buy"
+									? "bg-green-400"
+									: trx.type == "Mint"
+									? "bg-orange-600"
+									: "bg-slate-200  text-gray-800"
+							} `}
+							key={i}>
+							<p className={`p-1 `}>{trx.type}</p>
 							<div className="flex items-center justify-between">
-								<p>{trx.transactionHash.slice(0,8)}</p>
+								<p>{trx.transactionHash.slice(0, 8)}</p>
 								<p>{trx.timestamp}</p>
 							</div>
 						</div>
