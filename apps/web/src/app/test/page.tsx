@@ -1,190 +1,216 @@
-"use client"
+/** @format */
+
+"use client";
 
 import { useForm } from "react-hook-form";
 import { useState } from "react";
-import * as yup from "yup";
-import { yupResolver } from "@hookform/resolvers/yup";
 import Cropper from "react-cropper";
 import "cropperjs/dist/cropper.css";
 
-const nftImageTypesAccepted = "image/jpeg,image/png,image/gif,image/svg,image/webp";
+import { ImCloudUpload } from "react-icons/im";
+
+const nftImageTypesAccepted =
+	"image/jpeg,image/png,image/gif,image/svg,image/webp";
 
 interface FormData {
-  description: string;
-  name: string;
-  image: FileList;
+	description: string;
+	name: string;
+	image: any;
+	traits: string;
 }
 
-const schema = yup.object().shape({
-  description: yup.string(),
-  name: yup.string().required("You must provide a name for this NFT"),
-  image: yup.mixed().required("You must upload an image to represent this NFT"),
-});
-
 interface MintNftFormProps {
-  mintNft: (name: string, description: string, image: Blob) => Promise<void>;
+	mintNft: (name: string, traits: string, image: Blob) => Promise<void>;
 }
 
 export default function MintNftForm({ mintNft }: MintNftFormProps) {
-  const [isCropped, setIsCropped] = useState(false);
-  const [imageUploadUri, setImageUploadUri] = useState("");
-  const [imageUploadBlob, setImageUploadBlob] = useState(new Blob());
-  const [cropperInstance, setCropperInstance] = useState<Cropper>();
+	const [isCropped, setIsCropped] = useState(false);
+	const [imageUploadUri, setImageUploadUri] = useState("");
+	const [imageUploadBlob, setImageUploadBlob] = useState(new Blob());
+	const [cropperInstance, setCropperInstance] = useState<Cropper>();
+	const [enableCropping, setEnableCropping] = useState(true);
+  const [wrongFileFormateAlert, setWrongFileFormateAlert] = useState(false)
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-    reset,
-    setValue,
-  } = useForm<FormData>({
-    resolver: yupResolver(schema),
-  });
+	const {
+		register,
+		handleSubmit,
+		formState: { errors },
+		reset,
+	} = useForm<FormData>({
+		defaultValues: {
+			description: "",
+			name: "",
+			image: new File([], ""),
+			traits:
+				"Theme: love || dreams || nature || photography || celebrity\nArt Form: art || photography || digital art || painting\nSpecifics: celebrity name || location of image taken || art inspiration",
+		},
+	});
 
-  const onSubmit = async (data: FormData) => {
-    if (imageUploadUri === "" || !isCropped) {
-      // handle error
-    } else {
-      try {
-        await mintNft(data.name, data.description, imageUploadBlob);
-      } finally {
-        reset();
-        setIsCropped(false);
-        setImageUploadBlob(new Blob());
-        setImageUploadUri("");
-      }
-    }
-  };
+	const onSubmit = async (data: FormData) => {
+		if (imageUploadUri === "" || (enableCropping && !isCropped)) {
+			return;
+		} else {
+			try {
+				await mintNft(
+					data.name,
+					data.traits,
+					enableCropping ? imageUploadBlob : data.image[0],
+				);
+			} finally {
+				reset();
+				setIsCropped(false);
+				setImageUploadBlob(new Blob());
+				setImageUploadUri("");
+			}
+		}
+	};
 
-  return (
-    <div className=" p-6 mt-[15vh] min-h-screen rounded-md">
-      <h2 className="text-lg font-bold mb-4">Mint new NFT</h2>
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <div className="mb-4">
-          <label className="block text-gray-700 font-medium mb-2" htmlFor="name">
-            Name
-          </label>
-          <input
-            className={`w-full p-2 border rounded-md ${
-              errors.name ? "border-red-500" : "border-gray-300"
-            }`}
-            id="name"
-            type="text"
-            placeholder="My awesome NFT"
-            autoComplete="off"
-            {...register("name")}
-          />
-          {errors.name && (
-            <p className="text-red-500 text-sm mt-1">{errors.name.message}</p>
-          )}
-        </div>
+	return (
+		<div className=" p-6 mt-[15vh] min-h-screen rounded-md">
+			<h2 className="text-lg font-bold mb-4">Mint new NFT</h2>
+			<form onSubmit={handleSubmit(onSubmit)}>
+				<div className="mb-4">
+					<label className="label" htmlFor="name">
+						NFT Name/Title
+					</label>
+					<input
+						className={`input ${errors.name ? "border-red-500" : ""}`}
+						id="name"
+						type="text"
+						placeholder="My awesome NFT"
+						autoComplete="off"
+						{...register("name", { required: true })}
+					/>
+					{errors.name && <span className="errors">{errors.name.message}</span>}
+				</div>
 
-        <div className="mb-4">
-          <label
-            className="block text-gray-700 font-medium mb-2"
-            htmlFor="description"
-          >
-            Description
-          </label>
-          <textarea
-            className={`w-full p-2 border rounded-md ${
-              errors.description ? "border-red-500" : "border-gray-300"
-            }`}
-            id="description"
-            placeholder="Description of my awesome NFT"
-            {...register("description")}
-          />
-          {errors.description && (
-            <p className="text-red-500 text-sm mt-1">
-              {errors.description.message}
-            </p>
-          )}
-        </div>
+				<div className="mb-4">
+					<label className="label" htmlFor="traits">
+						Traits/Properties
+					</label>
+					<textarea
+						className="input"
+						id="traits"
+						{...register("traits", { required: true })}
+					/>
+					{errors.description && <span className="errors">You need to </span>}
+				</div>
 
-        {/* Image upload and crop logic here */}
-        <div className="mb-4">
-          <label
-            className="block text-gray-700 font-medium mb-2"
-            htmlFor="image"
-          >
-            Image
-          </label>
-          {!isCropped && (
-            <div className="flex flex-col items-center gap-12">
-              <input
-                type="file"
-                accept={nftImageTypesAccepted}
-                onChange={(e) => {
-                  if (e.target.files && e.target.files.length > 0) {
-                    const reader = new FileReader();
-                    reader.readAsDataURL(e.target.files[0]);
-                    reader.onload = () => {
-                      setImageUploadUri(reader.result as string);
-                    };
-                  }
-                }}
-              />
-              {imageUploadUri && (
-                <>
-                  <Cropper
-                    src={imageUploadUri}
-                    aspectRatio={1}
-                    guides={false}
-                    style={{ width: "100%", height: "20rem" }}
-                    onInitialized={(instance) => setCropperInstance(instance)}
-                  />
-                  <button
-                    className={`w-full p-2 rounded-md bg-black text-white font-medium mt-4`}
-                    
-                    onClick={() => {
-                      if (cropperInstance) {
-                        cropperInstance.getCroppedCanvas().toBlob((blob) => {
-                          if (blob) {
-                            setImageUploadBlob(blob);
-                            setIsCropped(true);
-                          }
-                        });
-                      }
-                    }}
-                  >
-                    Crop Image
-                  </button>
-                </>
-              )}
-            </div>
-          )}
-          {isCropped && (
-            <>
-              <img
-                src={URL.createObjectURL(imageUploadBlob)}
-                alt="Cropped NFT image"
-                className="w-full rounded-md"
-              />
-              <button
-                className="w-full p-2 m-5 rounded-md bg-primary text-white font-medium mt-4"
-                
-                onClick={() => {
-                  setIsCropped(false);
-                  setImageUploadUri("");
-                  setImageUploadBlob(new Blob());
-                }}
-              >
-                Change Image
-              </button>
-            </>
-          )}
-        </div>
+				{/* Image upload and crop logic here */}
+				<div className="mb-4">
+					<label className="label" htmlFor="image">
+						Image/Art work
+					</label>
+					{!isCropped && (
+						<div className="flex flex-col items-center gap-8 relative">
+							{!imageUploadUri && (
+								<label
+									htmlFor="dropzone-file"
+									className="flex cursor-pointer flex-col items-center justify-center">
+									<ImCloudUpload size={35} />
+									<p className="mb-2 text-sm text-gray-500 dark:text-gray-400">
+										<span className="font-semibold">Click to upload</span> or
+										drag anddrop
+									</p>
+									<p className="text-xs text-gray-500 dark:text-gray-400">
+										SVG, PNG, JPG, GIF, WEBP
+									</p>
 
-        <button
-          className={`w-full p-2 rounded-md bg-blue-600 text-white font-medium ${
-            Object.keys(errors).length > 0 && "opacity-50 cursor-not-allowed"
-          }`}
-        //   type="submit"
-          disabled={Object.keys(errors).length > 0}
-        >
-          Create collection
-        </button>
-      </form>
-    </div>
-  );
+									<input
+										type="file"
+										id="dropzone-file"
+										accept={nftImageTypesAccepted}
+										className="hidden w-full"
+										onChange={(e) => {
+											if (e.target.files && e.target.files.length > 0) {
+												const file = e.target.files[0];
+												if (!nftImageTypesAccepted.includes(file.type)) {
+                          setWrongFileFormateAlert(true)
+                          return
+												} else {
+													const reader = new FileReader();
+													reader.readAsDataURL(e.target.files[0]);
+													reader.onload = () => {
+														setImageUploadUri(reader.result as string);
+													};
+												}
+											}
+										}}
+									/>
+								</label>
+							)}
+
+							{enableCropping && imageUploadUri && (
+								<>
+									<Cropper
+										src={imageUploadUri}
+										aspectRatio={1}
+										guides={false}
+										style={{ width: "80%", height: "30rem" }}
+										onInitialized={(instance) => setCropperInstance(instance)}
+									/>
+									<button
+										className={`w-full p-2 rounded-md bg-black text-white font-medium mt-4`}
+										onClick={() => {
+											if (cropperInstance) {
+												cropperInstance.getCroppedCanvas().toBlob((blob) => {
+													if (blob) {
+														setImageUploadBlob(blob);
+														setIsCropped(true);
+													}
+												});
+											}
+										}}>
+										Crop Image
+									</button>
+								</>
+							)}
+						</div>
+					)}
+					{(isCropped || (!enableCropping && imageUploadUri)) && (
+						<>
+							<img
+								src={
+									enableCropping
+										? URL.createObjectURL(imageUploadBlob)
+										: imageUploadUri
+								}
+								alt="Cropped NFT image"
+								className="w-[50%] h-[180px] rounded-md "
+							/>
+							<button
+								className="w-full p-2 m-5 rounded-md bg-primary text-white font-medium mt-4"
+								onClick={() => {
+									setIsCropped(false);
+									setImageUploadUri("");
+									setImageUploadBlob(new Blob());
+								}}>
+								Change Image
+							</button>
+						</>
+					)}
+				</div>
+				<div className="mt-4">
+					<input
+						type="checkbox"
+						id="enableCropping"
+						checked={enableCropping}
+						onChange={(e) => setEnableCropping(e.target.checked)}
+					/>
+					<label className="ml-2" htmlFor="enableCropping">
+						Enable cropping
+					</label>
+				</div>
+
+				<button
+					className={`w-full p-2 rounded-md bg-blue-600 text-white font-medium ${
+						Object.keys(errors).length > 0 && "opacity-50 cursor-not-allowed"
+					}`}
+					//   type="submit"
+					disabled={Object.keys(errors).length > 0}>
+					Create collection
+				</button>
+			</form>
+		</div>
+	);
 }

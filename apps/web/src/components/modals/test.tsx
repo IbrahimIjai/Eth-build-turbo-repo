@@ -1,7 +1,5 @@
 import { useForm } from "react-hook-form";
 import { useState } from "react";
-import * as yup from "yup";
-import { yupResolver } from "@hookform/resolvers/yup";
 import Cropper from "react-cropper";
 import "cropperjs/dist/cropper.css";
 
@@ -13,12 +11,6 @@ interface FormData {
   image: FileList;
 }
 
-const schema = yup.object().shape({
-  description: yup.string(),
-  name: yup.string().required("You must provide a name for this NFT"),
-  image: yup.mixed().required("You must upload an image to represent this NFT"),
-});
-
 interface MintNftFormProps {
   mintNft: (name: string, description: string, image: Blob) => Promise<void>;
 }
@@ -28,6 +20,7 @@ export default function MintNftForm({ mintNft }: MintNftFormProps) {
   const [imageUploadUri, setImageUploadUri] = useState("");
   const [imageUploadBlob, setImageUploadBlob] = useState(new Blob());
   const [cropperInstance, setCropperInstance] = useState<Cropper>();
+  const [enableCropping, setEnableCropping] = useState(true);
 
   const {
     register,
@@ -36,15 +29,23 @@ export default function MintNftForm({ mintNft }: MintNftFormProps) {
     reset,
     setValue,
   } = useForm<FormData>({
-    resolver: yupResolver(schema),
+    defaultValues: {
+      description: "",
+      name: "",
+      image: new File([], ""),
+    },
   });
 
   const onSubmit = async (data: FormData) => {
-    if (imageUploadUri === "" || !isCropped) {
+    if (imageUploadUri === "" || (enableCropping && !isCropped)) {
       // handle error
     } else {
       try {
-        await mintNft(data.name, data.description, imageUploadBlob);
+        await mintNft(
+          data.name,
+          data.description,
+          enableCropping ? imageUploadBlob : data.image[0]
+        );
       } finally {
         reset();
         setIsCropped(false);
@@ -70,7 +71,7 @@ export default function MintNftForm({ mintNft }: MintNftFormProps) {
             type="text"
             placeholder="My awesome NFT"
             autoComplete="off"
-            {...register("name")}
+            {...register("name", { required: "You must provide a name for this NFT" })}
           />
           {errors.name && (
             <p className="text-red-500 text-sm mt-1">{errors.name.message}</p>
@@ -112,6 +113,9 @@ export default function MintNftForm({ mintNft }: MintNftFormProps) {
               <input
                 type="file"
                 accept={nftImageTypesAccepted}
+                {...register("image", {
+                  required: "You must upload an image to represent this NFT",
+                })}
                 onChange={(e) => {
                   if (e.target.files && e.target.files.length > 0) {
                     const reader = new FileReader();
@@ -122,7 +126,7 @@ export default function MintNftForm({ mintNft }: MintNftFormProps) {
                   }
                 }}
               />
-              {imageUploadUri && (
+              {enableCropping && imageUploadUri && (
                 <>
                   <Cropper
                     src={imageUploadUri}
@@ -151,11 +155,15 @@ export default function MintNftForm({ mintNft }: MintNftFormProps) {
               )}
             </>
           )}
-          {isCropped && (
+          {(isCropped || !enableCropping) && (
             <>
               <img
-                src={URL.createObjectURL(imageUploadBlob)}
-                alt="Cropped NFT image"
+                src={
+                  enableCropping
+                    ? URL.createObjectURL(imageUploadBlob)
+                    : imageUploadUri
+                }
+                alt="NFT image"
                 className="w-full rounded-md"
               />
               <button
@@ -171,6 +179,17 @@ export default function MintNftForm({ mintNft }: MintNftFormProps) {
               </button>
             </>
           )}
+          <div className="mt-4">
+            <input
+              type="checkbox"
+              id="enableCropping"
+              checked={enableCropping}
+              onChange={(e) => setEnableCropping(e.target.checked)}
+            />
+            <label className="ml-2" htmlFor="enableCropping">
+              Enable cropping
+            </label>
+          </div>
         </div>
 
         <button
