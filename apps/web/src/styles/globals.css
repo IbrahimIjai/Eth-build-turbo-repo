@@ -1,3 +1,18 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+
+
+.label{
+    @apply block mb-2 text-sm font-medium;
+}
+.input{
+    @apply px-6 py-2 bg-gray-700 text-white  focus:border border-primary outline-none rounded-md ;
+}
+.button{
+    @apply p-2 text-black font-bold bg-primary  rounded-md w-full;
+}
+.errors{
+    @apply block text-red-600 text-[.8rem] ;
+}

@@ -6,13 +6,13 @@ import Image from "next/image";
 
 const RecentColCard = ({ el, i }) => {
 	return (
-		<motion.div className="relative">
+		<motion.div className="relative cursor-pointer">
 			<div className="transition text-gray-300 duration-500 rounded-8 pb-1 hover:shadow-lg border border-yellow-900 hover:border-primary  rounded-lg shadow-primary">
-				<motion.div className="overflow-hidden rounded-lg relative w-full lg:w-[300px] h-[100px] lg:h-[180px]">
+				<motion.div className="overflow-hidden rounded-lg relative w-full h-[100px] lg:h-[180px]">
 					<Image
 						src={el.background}
 						alt="slider profile"
-						className="hover:scale-105 transition duration-100 ease-in"
+						className="hover:scale-110 transition duration-120 ease-in-out"
 						fill
 						style={{ objectFit: "cover" }}
 					/>

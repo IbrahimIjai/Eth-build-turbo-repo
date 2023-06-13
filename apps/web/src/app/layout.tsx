@@ -15,7 +15,7 @@ export default function RootLayout({
 	
 	return (
 		<html lang="en" className="bg-gray-900 overflow-x-hidden w-screen ">
-			<body className="">
+			<body className="overflow-x-hidden">
 				<Providers>
 					<Siebar/>
 					<Navbar />
