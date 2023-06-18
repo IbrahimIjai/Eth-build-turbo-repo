@@ -1,11 +1,17 @@
+
+
+
 /** @format */
 
 "use client";
 
 import { useForm } from "react-hook-form";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Cropper from "react-cropper";
 import "cropperjs/dist/cropper.css";
+
+import React from "react";
+import { ToastContainer, toast } from "react-toastify";
 
 import { ImCloudUpload } from "react-icons/im";
 
@@ -19,17 +25,27 @@ interface FormData {
 	traits: string;
 }
 
-interface MintNftFormProps {
-	mintNft: (name: string, traits: string, image: Blob) => Promise<void>;
-}
 
-export default function MintNftForm({ mintNft }: MintNftFormProps) {
+export default function MintNftForm() {
 	const [isCropped, setIsCropped] = useState(false);
 	const [imageUploadUri, setImageUploadUri] = useState("");
 	const [imageUploadBlob, setImageUploadBlob] = useState(new Blob());
 	const [cropperInstance, setCropperInstance] = useState<Cropper>();
 	const [enableCropping, setEnableCropping] = useState(true);
-  const [wrongFileFormateAlert, setWrongFileFormateAlert] = useState(false)
+
+	const notify = () =>
+		toast.error(
+			"Wrong file formate! you can only mint an SVG, PNG, JPG, GIF, WEBP file!", {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+        }
+		);
 
 	const {
 		register,
@@ -51,7 +67,7 @@ export default function MintNftForm({ mintNft }: MintNftFormProps) {
 			return;
 		} else {
 			try {
-				await mintNft(
+				console.log(
 					data.name,
 					data.traits,
 					enableCropping ? imageUploadBlob : data.image[0],
@@ -65,9 +81,10 @@ export default function MintNftForm({ mintNft }: MintNftFormProps) {
 		}
 	};
 
+	
+
 	return (
-		<div className=" p-6 mt-[15vh] min-h-screen rounded-md">
-			<h2 className="text-lg font-bold mb-4">Mint new NFT</h2>
+		<div className="">
 			<form onSubmit={handleSubmit(onSubmit)}>
 				<div className="mb-4">
 					<label className="label" htmlFor="name">
@@ -89,7 +106,7 @@ export default function MintNftForm({ mintNft }: MintNftFormProps) {
 						Traits/Properties
 					</label>
 					<textarea
-						className="input"
+						className="input min-h-[110px]"
 						id="traits"
 						{...register("traits", { required: true })}
 					/>
@@ -101,6 +118,19 @@ export default function MintNftForm({ mintNft }: MintNftFormProps) {
 					<label className="label" htmlFor="image">
 						Image/Art work
 					</label>
+
+					<div className="mt-4">
+					<input
+						className="text-[2rem]"
+						type="checkbox"
+						id="enableCropping"
+						checked={enableCropping}
+						onChange={(e) => setEnableCropping(e.target.checked)}
+					/>
+					<label className="ml-2 text-primary" htmlFor="enableCropping">
+						Enable cropping
+					</label>
+				</div>
 					{!isCropped && (
 						<div className="flex flex-col items-center gap-8 relative">
 							{!imageUploadUri && (
@@ -125,8 +155,8 @@ export default function MintNftForm({ mintNft }: MintNftFormProps) {
 											if (e.target.files && e.target.files.length > 0) {
 												const file = e.target.files[0];
 												if (!nftImageTypesAccepted.includes(file.type)) {
-                          setWrongFileFormateAlert(true)
-                          return
+													notify();
+													return;
 												} else {
 													const reader = new FileReader();
 													reader.readAsDataURL(e.target.files[0]);
@@ -190,17 +220,7 @@ export default function MintNftForm({ mintNft }: MintNftFormProps) {
 						</>
 					)}
 				</div>
-				<div className="mt-4">
-					<input
-						type="checkbox"
-						id="enableCropping"
-						checked={enableCropping}
-						onChange={(e) => setEnableCropping(e.target.checked)}
-					/>
-					<label className="ml-2" htmlFor="enableCropping">
-						Enable cropping
-					</label>
-				</div>
+				
 
 				<button
 					className={`w-full p-2 rounded-md bg-blue-600 text-white font-medium ${

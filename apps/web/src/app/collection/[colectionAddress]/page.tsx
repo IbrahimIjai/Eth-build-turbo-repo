@@ -6,18 +6,27 @@ import images from "../../../components/img";
 import NFTcard from "../../../components/NFTCard";
 import MintNftModal from "../../../components/modals/MintNft";
 import Image from "next/image";
+import { motion, AnimatePresence } from "framer-motion";
+
 export default function NFTId() {
-	const [isModalOpen, setModalOpen] = useState(false)
+	const [isModalOpen, setModalOpen] = useState(false);
 	function closeModal() {
-		setModalOpen(false)
-	  }
-	
-	  function openModal() {
-		setModalOpen(true)
-	  }
+		setModalOpen(false);
+		console.log("yoooooooooooooooo");
+	}
+
+	function openModal() {
+		setModalOpen(true);
+	}
 
 	return (
 		<div className="px-[2rem] mt-[15vh] flex flex-col items-center gap-8">
+			<AnimatePresence>
+				{isModalOpen && (
+					<MintNftModal isModalOpen={isModalOpen} closeModal={closeModal} />
+				)}
+			</AnimatePresence>
+
 			<div className="flex items-center gap-2 md:gap-6 ">
 				<div className="relative w-[90px] md:w-[150px]  h-[90px] md:h-[150px] overflow-hidden rounded-[50%]">
 					<Image
@@ -40,8 +49,10 @@ export default function NFTId() {
 					benefits within the world.
 				</p>
 			</div>
-			<div className="w-full flex items-center justify-end my-12">
-				<button onClick={openModal} className="p-1 bg-primary rounded-lg text-center active:scale-95 transition duration-75  text-black text-bold">
+			<div className="w-full px-[3rem] flex items-center justify-end my-12">
+				<button
+					onClick={openModal}
+					className="p-1 bg-primary rounded-lg text-center active:scale-95 transition duration-75  text-black text-bold">
 					Mint a New NFT
 				</button>
 			</div>
@@ -58,7 +69,6 @@ export default function NFTId() {
 						/>
 					);
 				})}
-				<MintNftModal isModalOpen={isModalOpen} closeModal={closeModal}/>
 			</div>
 		</div>
 	);

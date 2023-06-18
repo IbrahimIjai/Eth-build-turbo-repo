@@ -36,10 +36,10 @@ export const FollowingArray = [
 ];
 const Slider = () => {
 	return (
-		<div className="w-screen text-white">
+		<div className="w-screen px-[3rem] text-white">
 			<p>Here are all your collection minted</p>
 
-			<motion.div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+			<motion.div className="grid grid-cols-2 gap-4 lg:grid-cols-3">
 				{FollowingArray.map((el, i) => (
 					<RecentColCard key={i + 1} el={el} i={i} />
 				))}
