@@ -17,11 +17,11 @@ export default function NFTId() {
 				</button>
 			</div>
 
-			<motion.div className="grid grid-cols-2 lg:grid-cols-3 gap-8 mb-8">
+			<div className="grid grid-cols-2 lg:grid-cols-3 gap-8 mb-8">
 				{FollowingArray.map((el, i) => (
 					<RecentColCard key={i + 1} el={el} i={i} />
 				))}
-			</motion.div>
+			</div>
 		</div>
 	);
 }
