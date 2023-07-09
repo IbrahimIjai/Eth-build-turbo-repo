@@ -1,75 +1,57 @@
-// app/providers.tsx
-'use client'
-import { CacheProvider } from '@chakra-ui/next-js'
-import { ChakraProvider } from '@chakra-ui/react'
+/** @format */
+
+"use client";
+
+// import * as React from "react";
+import { useState, useEffect } from "react";
 import {
 	RainbowKitProvider,
 	getDefaultWallets,
 	connectorsForWallets,
 } from "@rainbow-me/rainbowkit";
+import "@rainbow-me/rainbowkit/styles.css";
 import {
-	argentWallet,
-	trustWallet,
-	ledgerWallet,
-  metaMaskWallet,
+	injectedWallet,
+	walletConnectWallet,
+	metaMaskWallet,
 } from "@rainbow-me/rainbowkit/wallets";
-import { configureChains, createConfig, WagmiConfig } from "wagmi";
-import {
-	bsc,
-	goerli,
-} from "wagmi/chains";
+import { configureChains, createClient, WagmiConfig } from "wagmi";
+import { bsc, bscTestnet } from "wagmi/chains";
 import { publicProvider } from "wagmi/providers/public";
-const { chains, publicClient, webSocketPublicClient } = configureChains(
-	[
-		bsc,
-		goerli,
-		...(process.env.NEXT_PUBLIC_ENABLE_TESTNETS === "true" ? [goerli] : []),
-	],
-	[publicProvider()],
-);
 
-const projectId = "YOUR_PROJECT_ID";
 
-const { wallets } = getDefaultWallets({
-	appName: "RainbowKit demo",
-	projectId,
-	chains,
-});
-
-const demoAppInfo = {
-	appName: "Rainbowkit Demo",
-};
+const { chains, provider, webSocketProvider } = configureChains(
+	[bsc, bscTestnet],
+	[publicProvider()]
+  );
+const projectId = "3m";
 
 const connectors = connectorsForWallets([
-	...wallets,
 	{
-		groupName: "Other",
+		groupName: "Recommended",
 		wallets: [
-			argentWallet({ projectId, chains }),
-			trustWallet({ projectId, chains }),
-			ledgerWallet({ projectId, chains }),
+			injectedWallet({ chains }),
+			metaMaskWallet({ projectId, chains }),
+			walletConnectWallet({ projectId, chains }),
 		],
 	},
 ]);
 
-const wagmiConfig = createConfig({
+const wagmiClient = createClient({
 	autoConnect: true,
 	connectors,
-	publicClient,
-	webSocketPublicClient,
-});
+	provider,
+	webSocketProvider,
+  });
 
-
-export function Providers({ 
-    children 
-  }: { 
-  children: React.ReactNode 
-  }) {
-  return (
-    <CacheProvider>
-      <ChakraProvider>
-        {children}
-      </ChakraProvider>
-    </CacheProvider>
-  )
+export function Providers({ children }: { children: React.ReactNode }) {
+	const [mounted, setMounted] = useState(false);
+	useEffect(() => setMounted(true), []);
+	return (
+		<WagmiConfig client={wagmiClient}>
+			<RainbowKitProvider chains={chains}>
+				{mounted && children}
+			</RainbowKitProvider>
+		</WagmiConfig>
+	);
 }

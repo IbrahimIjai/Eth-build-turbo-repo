@@ -1,11 +1,5 @@
-/** @type {import('next').NextConfig} */
-const nextConfig = {
-	reactStrictMode: true,
-	webpack: (config) => {
-		config.resolve.fallback = { fs: false, net: false, tls: false };
-		config.externals.push("pino-pretty", "lokijs", "encoding");
-		return config;
-	},
-};
+/// <reference types="next" />
+/// <reference types="next/image-types/global" />
 
-module.exports = nextConfig
+// NOTE: This file should not be edited
+// see https://nextjs.org/docs/basic-features/typescript for more information.
